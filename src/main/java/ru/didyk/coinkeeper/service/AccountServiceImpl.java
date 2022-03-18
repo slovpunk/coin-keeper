@@ -35,14 +35,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
 //    @Override
-//    public Account getById(Long id) {
-//        System.out.println("Service");
-//        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-//        Account account1 = accountRepository.getById(id);
-//        return account1;
-//    }
-
-//    @Override
 //    public void plusMinusBalance(Long id, Account account, Integer sum) {
 //        Account account1 = accountRepository.getById(id);
 //        account1.setBalance(account.getBalance() - sum);
