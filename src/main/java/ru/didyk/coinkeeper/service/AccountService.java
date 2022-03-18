@@ -3,13 +3,13 @@ package ru.didyk.coinkeeper.service;
 import ru.didyk.coinkeeper.form.AccountForm;
 import ru.didyk.coinkeeper.model.Account;
 
+import java.util.Optional;
+
 public interface AccountService {
 
-    //добавить счёт
     void save(Account form);
 
-    Account getById(Long id);
+    Optional<Account> findById(Long aLong);
 
-    //добавлять траты
-    void plusMinusBalance(Long id, Account account, Integer sum);
+//    void plusMinusBalance(Long id, Account account, Integer sum);
 }

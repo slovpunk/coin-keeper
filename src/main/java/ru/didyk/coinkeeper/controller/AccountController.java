@@ -1,6 +1,9 @@
 package ru.didyk.coinkeeper.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.didyk.coinkeeper.model.Account;
@@ -21,6 +24,6 @@ public class AccountController {
     @GetMapping("{id}")
     public Account getAccount(@PathVariable(value = "id") Long id) {
         System.out.println("Controller");
-        return accountService.getById(id);
+        return accountService.findById(id).get();
     }
 }
