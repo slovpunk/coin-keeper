@@ -28,6 +28,12 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findById(aLong);
     }
 
+    @Override
+    public void delete(Long id) {
+        Account account = accountRepository.getById(id);
+        accountRepository.delete(account);
+    }
+
 //    @Override
 //    public Account getById(Long id) {
 //        System.out.println("Service");

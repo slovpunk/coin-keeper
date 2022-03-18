@@ -17,18 +17,26 @@ public class AccountController {
 
     @Autowired
     public AccountController(AccountService accountService) {
-        System.out.println("Constructor");
         this.accountService = accountService;
     }
 
     @GetMapping("{id}")
     public Account getAccount(@PathVariable(value = "id") Long id) {
-        System.out.println("Controller");
         return accountService.findById(id).get();
     }
 
-    @PostMapping("update")
+    @PostMapping("/")
     public Account add(@RequestBody Account account) {
         return accountService.save(account);
+    }
+
+    @PutMapping("/")
+    public Account update(@RequestBody Account account) {
+        return accountService.save(account);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public void delete(@PathVariable(value = "id") Long id) {
+        accountService.delete(id);
     }
 }

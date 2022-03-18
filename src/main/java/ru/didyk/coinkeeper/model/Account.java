@@ -12,13 +12,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 @Entity
 @Table(name = "ACCOUNT")
-@AllArgsConstructor
-@NoArgsConstructor
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Account {
 
     @Id
@@ -29,12 +28,4 @@ public class Account {
     @Column(name = "balance")
     private Long balance;
 
-//    @JsonCreator
-//    public Account(@JsonProperty("id") Long id, @JsonProperty("balance") Long balance) {
-//        this.id = id;
-//        this.balance = balance;
-//    }
-//
-//    public Account() {
-//    }
 }

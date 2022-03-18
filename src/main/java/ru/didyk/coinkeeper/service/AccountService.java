@@ -11,5 +11,7 @@ public interface AccountService {
 
     Optional<Account> findById(Long aLong);
 
+    void delete(Long id);
+
 //    void plusMinusBalance(Long id, Account account, Integer sum);
 }
