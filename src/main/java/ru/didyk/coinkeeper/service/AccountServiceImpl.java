@@ -1,12 +1,13 @@
 package ru.didyk.coinkeeper.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.didyk.coinkeeper.form.AccountForm;
 import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.repository.AccountRepository;
 
-@Service
+@Component
 public class AccountServiceImpl implements AccountService {
 
 
@@ -18,12 +19,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void save(AccountForm form) {
-        Account account = Account.builder()
-                .id(form.getId())
-                .balance(form.getBalance())
-                .build();
+    public void save(Account account) {
         accountRepository.save(account);
+    }
+
+    @Override
+    public Account getById(Long id) {
+        return accountRepository.getById(id);
     }
 
     @Override

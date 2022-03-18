@@ -6,7 +6,9 @@ import ru.didyk.coinkeeper.model.Account;
 public interface AccountService {
 
     //добавить счёт
-    void save(AccountForm form);
+    void save(Account form);
+
+    Account getById(Long id);
 
     //добавлять траты
     void plusMinusBalance(Long id, Account account, Integer sum);
