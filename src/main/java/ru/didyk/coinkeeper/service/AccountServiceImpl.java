@@ -1,13 +1,7 @@
 package ru.didyk.coinkeeper.service;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import ru.didyk.coinkeeper.form.AccountForm;
 import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.repository.AccountRepository;
 
@@ -25,8 +19,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void save(Account account) {
-        accountRepository.save(account);
+    public Account save(Account account) {
+        return accountRepository.save(account);
     }
 
     @Override

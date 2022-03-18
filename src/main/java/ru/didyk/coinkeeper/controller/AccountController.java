@@ -26,4 +26,9 @@ public class AccountController {
         System.out.println("Controller");
         return accountService.findById(id).get();
     }
+
+    @PostMapping("update")
+    public Account add(@RequestBody Account account) {
+        return accountService.save(account);
+    }
 }

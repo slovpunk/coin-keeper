@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AccountService {
 
-    void save(Account form);
+    Account save(Account account);
 
     Optional<Account> findById(Long aLong);
 
