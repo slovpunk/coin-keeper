@@ -8,5 +8,7 @@ public interface ProductCategoryService {
 
     void addPurchasesInCategory(ProductCategory productCategory, Long categoryId);
 
+    void deleteCategory(Long id);
+
     ProductCategory getCategoryById(Long id);
 }

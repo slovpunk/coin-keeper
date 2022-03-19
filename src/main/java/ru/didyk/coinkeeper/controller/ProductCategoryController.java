@@ -36,4 +36,9 @@ public class ProductCategoryController {
                                @PathVariable(name = "category-id") Long categoryId) {
         productCategoryService.addPurchasesInCategory(category, categoryId);
     }
+
+    @DeleteMapping("delete-category/{category-id}")
+    public void deleteProductCategory(@PathVariable(name = "category-id") Long categoryId) {
+        productCategoryService.deleteCategory(categoryId);
+    }
 }
