@@ -17,9 +17,11 @@ public class ProductCategoryController {
     public ProductCategoryController(ProductCategoryService service) {
         this.productCategoryService = service;
     }
-
-    @GetMapping("category/{id}")
-    public ProductCategory getCategoryById(@PathVariable(name = "id") Long id) {
+    /*
+    TODO: вылетает null
+     */
+    @GetMapping("category/{category-id}")
+    public ProductCategory getCategoryById(@PathVariable(name = "category-id") Long id) {
         return productCategoryService.getCategoryById(id);
     }
 

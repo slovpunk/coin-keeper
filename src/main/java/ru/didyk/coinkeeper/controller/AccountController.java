@@ -19,6 +19,9 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    /*
+    TODO: Вызывая это метод, выскакивает stackoverflow из-за того, что подтягивается всё вглубь рекурсивно
+     */
     @GetMapping("{account-id}")
     public Account getAccount(@PathVariable(value = "account-id") Long id) {
         return accountService.findAccountById(id).get();
@@ -34,6 +37,9 @@ public class AccountController {
         return accountService.saveAccount(account);
     }
 
+    /*
+    TODO: удаление Account, с которым связаны ProductCategory, не работает
+     */
     @DeleteMapping("delete/{account-id}")
     public void deleteAccount(@PathVariable(value = "account-id") Long id) {
         accountService.deleteAccount(id);
