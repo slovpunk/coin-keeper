@@ -19,9 +19,6 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    /*
-    TODO: Вызывая это метод, выскакивает stackoverflow из-за того, что подтягивается всё вглубь рекурсивно
-     */
     @GetMapping("{account-id}")
     public Account getAccount(@PathVariable(value = "account-id") Long id) {
         return accountService.findAccountById(id).get();

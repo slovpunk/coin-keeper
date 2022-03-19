@@ -7,6 +7,8 @@ import ru.didyk.coinkeeper.model.ProductCategory;
 import ru.didyk.coinkeeper.repository.AccountRepository;
 import ru.didyk.coinkeeper.repository.ProductCategoryRepository;
 
+import java.util.Optional;
+
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
@@ -64,7 +66,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     При помощи этого метода пользователь может получить информацию о категории товара при помощи id
      */
     @Override
-    public ProductCategory getCategoryById(Long id) {
-        return productCategoryRepository.getById(id);
+    public Optional<ProductCategory> getCategoryById(Long id) {
+        return productCategoryRepository.findById(id);
     }
 }

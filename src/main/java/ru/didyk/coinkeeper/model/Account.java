@@ -1,13 +1,16 @@
 package ru.didyk.coinkeeper.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +28,8 @@ public class Account {
     @Column(name = "balance")
     private Long balance;
 
-    @OneToMany(mappedBy = "account")
-    private List<ProductCategory> productCategoryList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    @JsonManagedReference
+    private List<ProductCategory> productCategoryList;
 
 }

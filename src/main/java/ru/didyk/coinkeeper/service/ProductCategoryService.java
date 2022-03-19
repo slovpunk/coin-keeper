@@ -2,6 +2,8 @@ package ru.didyk.coinkeeper.service;
 
 import ru.didyk.coinkeeper.model.ProductCategory;
 
+import java.util.Optional;
+
 public interface ProductCategoryService {
 
     void addProductCategory(ProductCategory productCategory, Long accountId);
@@ -10,5 +12,5 @@ public interface ProductCategoryService {
 
     void deleteCategory(Long id);
 
-    ProductCategory getCategoryById(Long id);
+    Optional<ProductCategory> getCategoryById(Long id);
 }

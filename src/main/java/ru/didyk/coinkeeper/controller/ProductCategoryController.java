@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.didyk.coinkeeper.model.ProductCategory;
 import ru.didyk.coinkeeper.service.ProductCategoryService;
 
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping(AccountController.PATH)
@@ -21,7 +23,7 @@ public class ProductCategoryController {
     TODO: вылетает null
      */
     @GetMapping("category/{category-id}")
-    public ProductCategory getCategoryById(@PathVariable(name = "category-id") Long id) {
+    public Optional<ProductCategory> getCategoryById(@PathVariable(name = "category-id") Long id) {
         return productCategoryService.getCategoryById(id);
     }
 
