@@ -1,31 +1,31 @@
 package ru.didyk.coinkeeper.model;
 
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Builder
 @Entity
-@Table(name = "ACCOUNT")
-public class Account {
+@Table(name = "product_category")
+public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "balance")
-    private Long balance;
+    @Column(name = "title")
+    private String title;
 
-    @OneToMany(mappedBy = "account")
-    private List<ProductCategory> productCategoryList = new ArrayList<>();
+    @Column(name = "sum")
+    private Integer sum;
 
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 }
