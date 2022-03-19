@@ -52,6 +52,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         productCategoryRepository.save(newCategory);
     }
 
+    /*
+    При помощи этого метода пользователь удаляет категорию
+     */
     @Override
     public void deleteCategory(Long id) {
         productCategoryRepository.delete(productCategoryRepository.getById(id));
