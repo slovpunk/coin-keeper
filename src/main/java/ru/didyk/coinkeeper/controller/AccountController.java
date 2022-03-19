@@ -10,8 +10,10 @@ import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.service.AccountService;
 
 @RestController
-@RequestMapping("/api/coinkeeper/")
+@RequestMapping(AccountController.PATH)
 public class AccountController {
+
+    public final static String PATH = "/api/coinkeeper/";
 
     private AccountService accountService;
 
