@@ -3,7 +3,6 @@ package ru.didyk.coinkeeper.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.model.ProductCategory;
 import ru.didyk.coinkeeper.service.AccountService;
 import ru.didyk.coinkeeper.service.ProductCategoryService;
@@ -14,22 +13,27 @@ import ru.didyk.coinkeeper.service.ProductCategoryService;
 public class ProductCategoryController {
 
     private ProductCategoryService service;
-    private AccountService accountService;
 
     @Autowired
-    public ProductCategoryController(ProductCategoryService service, AccountService accountService) {
+    public ProductCategoryController(ProductCategoryService service) {
         this.service = service;
-        this.accountService = accountService;
     }
 
     @GetMapping("category/{id}")
-    public ProductCategory getById(Long id) {
+    public ProductCategory getById(@PathVariable(name = "id") Long id) {
         return service.getById(id);
     }
 
-    @PostMapping("add/{account-id}")
-    public void addProductCategory(@RequestBody ProductCategory category, @PathVariable(name = "account-id") Long accountId) {
+    @PostMapping("add-category/{account-id}")
+    public void addProductCategory(@RequestBody ProductCategory category,
+                                   @PathVariable(name = "account-id") Long accountId) {
         service.addProductCategory(category, accountId);
+    }
+
+    @PutMapping("update-category/{category-id}")
+    public void updateCategory(@RequestBody ProductCategory category,
+                               @PathVariable(name = "category-id") Long categoryId) {
+        service.updateCategory(category, categoryId);
     }
 
 }

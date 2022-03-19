@@ -33,6 +33,22 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         repository.save(category);
     }
 
+    /*
+    При помощи этого метода пользователь добавляет сумму совершенных покупок
+    в категорию Продукты. Должен обновляться баланс в Account и sum в ProductCategory
+     */
+    @Override
+    public void updateCategory(ProductCategory productCategory, Long categoryId) {
+        ProductCategory newCategory = repository.getById(categoryId);
+        Account account = accountRepository.getById(newCategory.getAccount().getId());
+        account.setBalance(account.getBalance() - productCategory.getSum());
+        newCategory.setAccount(account);
+        newCategory.setId(productCategory.getId());
+        newCategory.setTitle(productCategory.getTitle());
+        newCategory.setSum(productCategory.getSum() + newCategory.getSum());
+        repository.save(newCategory);
+    }
+
     @Override
     public ProductCategory getById(Long id) {
         return repository.getById(id);
