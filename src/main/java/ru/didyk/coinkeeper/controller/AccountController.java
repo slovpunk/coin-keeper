@@ -19,23 +19,23 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("{id}")
-    public Account getAccount(@PathVariable(value = "id") Long id) {
+    @GetMapping("{account-id}")
+    public Account getAccount(@PathVariable(value = "account-id") Long id) {
         return accountService.findAccountById(id).get();
     }
 
-    @PostMapping("/")
+    @PostMapping("account")
     public Account addAccount(@RequestBody Account account) {
         return accountService.saveAccount(account);
     }
 
-    @PutMapping("/")
+    @PutMapping("account")
     public Account updateAccount(@RequestBody Account account) {
         return accountService.saveAccount(account);
     }
 
-    @DeleteMapping("delete/{id}")
-    public void deleteAccount(@PathVariable(value = "id") Long id) {
+    @DeleteMapping("delete/{account-id}")
+    public void deleteAccount(@PathVariable(value = "account-id") Long id) {
         accountService.deleteAccount(id);
     }
 }

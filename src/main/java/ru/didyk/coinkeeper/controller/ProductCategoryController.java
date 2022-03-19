@@ -34,5 +34,4 @@ public class ProductCategoryController {
                                @PathVariable(name = "category-id") Long categoryId) {
         productCategoryService.addPurchasesInCategory(category, categoryId);
     }
-
 }
