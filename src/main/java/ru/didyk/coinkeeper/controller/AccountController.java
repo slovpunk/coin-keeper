@@ -34,9 +34,6 @@ public class AccountController {
         return accountService.saveAccount(account);
     }
 
-    /*
-    TODO: удаление Account, с которым связаны ProductCategory, не работает
-     */
     @DeleteMapping("delete/{account-id}")
     public void deleteAccount(@PathVariable(value = "account-id") Long id) {
         accountService.deleteAccount(id);
