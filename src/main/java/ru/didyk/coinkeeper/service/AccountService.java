@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface AccountService {
 
-    Account save(Account account);
+    Account saveAccount(Account account);
 
-    Optional<Account> findById(Long aLong);
+    Optional<Account> findAccountById(Long aLong);
 
-    void delete(Long id);
+    void deleteAccount(Long id);
 
 //    void plusMinusBalance(Long id, Account account, Integer sum);
 }

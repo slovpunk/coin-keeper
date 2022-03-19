@@ -2,12 +2,13 @@ package ru.didyk.coinkeeper.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.repository.AccountRepository;
 
 import java.util.Optional;
 
-@Component
+@Service
 public class AccountServiceImpl implements AccountService {
 
 
@@ -19,25 +20,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account save(Account account) {
+    public Account saveAccount(Account account) {
         return accountRepository.save(account);
     }
 
     @Override
-    public Optional<Account> findById(Long aLong) {
+    public Optional<Account> findAccountById(Long aLong) {
         return accountRepository.findById(aLong);
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteAccount(Long id) {
         Account account = accountRepository.getById(id);
         accountRepository.delete(account);
     }
-
-//    @Override
-//    public void plusMinusBalance(Long id, Account account, Integer sum) {
-//        Account account1 = accountRepository.getById(id);
-//        account1.setBalance(account.getBalance() - sum);
-//        accountRepository.save(account1);
-//    }
 }

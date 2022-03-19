@@ -11,15 +11,18 @@ import ru.didyk.coinkeeper.repository.ProductCategoryRepository;
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
 
-    private ProductCategoryRepository repository;
+    private ProductCategoryRepository productCategoryRepository;
     private AccountRepository accountRepository;
 
     @Autowired
     public ProductCategoryServiceImpl(ProductCategoryRepository repository, AccountRepository accountRepository) {
-        this.repository = repository;
+        this.productCategoryRepository = repository;
         this.accountRepository = accountRepository;
     }
 
+    /*
+    При помощи этого метода пользователь добавляет категории товаров, привязывая их к своему счету.
+     */
     @Override
     public void addProductCategory(ProductCategory productCategory, Long accountId) {
         Account account = accountRepository.findById(accountId).get();
@@ -30,27 +33,30 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                 .title(productCategory.getTitle())
                 .account(account)
                 .build();
-        repository.save(category);
+        productCategoryRepository.save(category);
     }
 
     /*
     При помощи этого метода пользователь добавляет сумму совершенных покупок
-    в категорию Продукты. Должен обновляться баланс в Account и sum в ProductCategory
+    в желаемую категорию. Баланс в Account и sum в ProductCategory обновляются.
      */
     @Override
-    public void updateCategory(ProductCategory productCategory, Long categoryId) {
-        ProductCategory newCategory = repository.getById(categoryId);
+    public void addPurchasesInCategory(ProductCategory productCategory, Long categoryId) {
+        ProductCategory newCategory = productCategoryRepository.getById(categoryId);
         Account account = accountRepository.getById(newCategory.getAccount().getId());
         account.setBalance(account.getBalance() - productCategory.getSum());
         newCategory.setAccount(account);
         newCategory.setId(productCategory.getId());
         newCategory.setTitle(productCategory.getTitle());
         newCategory.setSum(productCategory.getSum() + newCategory.getSum());
-        repository.save(newCategory);
+        productCategoryRepository.save(newCategory);
     }
 
+    /*
+    При помощи этого метода пользователь может получить информацию о категории товара при помощи id
+     */
     @Override
-    public ProductCategory getById(Long id) {
-        return repository.getById(id);
+    public ProductCategory getCategoryById(Long id) {
+        return productCategoryRepository.getById(id);
     }
 }

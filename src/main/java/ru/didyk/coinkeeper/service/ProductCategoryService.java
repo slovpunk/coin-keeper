@@ -6,7 +6,7 @@ public interface ProductCategoryService {
 
     void addProductCategory(ProductCategory productCategory, Long accountId);
 
-    void updateCategory(ProductCategory productCategory, Long categoryId);
+    void addPurchasesInCategory(ProductCategory productCategory, Long categoryId);
 
-    ProductCategory getById(Long id);
+    ProductCategory getCategoryById(Long id);
 }
