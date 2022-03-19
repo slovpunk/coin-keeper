@@ -21,8 +21,16 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public void addProductCategory(ProductCategory productCategory) {
-        repository.save(productCategory);
+    public void addProductCategory(ProductCategory productCategory, Long accountId) {
+        Account account = accountRepository.findById(accountId).get();
+        account.setBalance(account.getBalance() - productCategory.getSum());
+        ProductCategory category = ProductCategory.builder()
+                .id(productCategory.getId())
+                .sum(productCategory.getSum())
+                .title(productCategory.getTitle())
+                .account(account)
+                .build();
+        repository.save(category);
     }
 
     @Override

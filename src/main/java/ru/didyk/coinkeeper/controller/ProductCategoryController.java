@@ -27,16 +27,9 @@ public class ProductCategoryController {
         return service.getById(id);
     }
 
-    @PostMapping("add/{id}")
-    public void addProductCategory(@RequestBody ProductCategory category, @PathVariable(name = "id") Long id) {
-        Account account = accountService.findById(id).get();
-        ProductCategory productCategory = ProductCategory.builder()
-                .id(category.getId())
-                .sum(category.getSum())
-                .title(category.getTitle())
-                .account(account)
-                .build();
-        service.addProductCategory(productCategory);
+    @PostMapping("add/{account-id}")
+    public void addProductCategory(@RequestBody ProductCategory category, @PathVariable(name = "account-id") Long accountId) {
+        service.addProductCategory(category, accountId);
     }
 
 }
