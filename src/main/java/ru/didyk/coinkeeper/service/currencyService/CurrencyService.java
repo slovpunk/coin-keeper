@@ -1,4 +1,4 @@
-package ru.didyk.coinkeeper.service;
+package ru.didyk.coinkeeper.service.currencyService;
 
 import ru.didyk.coinkeeper.model.Currency;
 

@@ -4,7 +4,7 @@ package ru.didyk.coinkeeper.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.didyk.coinkeeper.model.ProductCategory;
-import ru.didyk.coinkeeper.service.ProductCategoryService;
+import ru.didyk.coinkeeper.service.productCategory.ProductCategoryService;
 
 import java.util.Optional;
 

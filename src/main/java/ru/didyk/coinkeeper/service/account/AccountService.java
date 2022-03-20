@@ -1,4 +1,4 @@
-package ru.didyk.coinkeeper.service;
+package ru.didyk.coinkeeper.service.account;
 
 import ru.didyk.coinkeeper.model.Account;
 

@@ -4,7 +4,7 @@ package ru.didyk.coinkeeper.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.didyk.coinkeeper.model.Account;
-import ru.didyk.coinkeeper.service.AccountService;
+import ru.didyk.coinkeeper.service.account.AccountService;
 
 @RestController
 @RequestMapping(AccountController.PATH)

@@ -1,4 +1,4 @@
-package ru.didyk.coinkeeper.service;
+package ru.didyk.coinkeeper.service.productCategory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

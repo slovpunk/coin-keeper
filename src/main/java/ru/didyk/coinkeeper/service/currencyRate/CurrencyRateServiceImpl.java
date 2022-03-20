@@ -1,4 +1,4 @@
-package ru.didyk.coinkeeper.service;
+package ru.didyk.coinkeeper.service.currencyRate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ExpressionException;

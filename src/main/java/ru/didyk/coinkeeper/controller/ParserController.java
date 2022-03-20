@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.didyk.coinkeeper.model.modelForParsing.CurrencyRate;
-import ru.didyk.coinkeeper.service.CurrencyRateService;
+import ru.didyk.coinkeeper.service.currencyRate.CurrencyRateService;
 
 @RestController
 @RequestMapping(AccountController.PATH)

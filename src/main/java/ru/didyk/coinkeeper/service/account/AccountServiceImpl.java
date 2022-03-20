@@ -1,7 +1,6 @@
-package ru.didyk.coinkeeper.service;
+package ru.didyk.coinkeeper.service.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.repository.AccountRepository;
