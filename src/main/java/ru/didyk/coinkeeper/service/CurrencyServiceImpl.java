@@ -30,6 +30,9 @@ public class CurrencyServiceImpl implements CurrencyService {
         this.currencyRateParser = currencyRateParser;
     }
 
+    /*
+    При помощи этого метода пользователь может получить актуальный курс валют по ЦБ используя тикер
+     */
     @Override
     public CurrencyRate getCurrencyRate(String currency) {
         try {
