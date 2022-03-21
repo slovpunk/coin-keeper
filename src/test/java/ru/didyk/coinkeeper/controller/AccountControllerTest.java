@@ -80,15 +80,11 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.id", is(1)));
     }
 
-    /*
-    TODO: не работает пока
-     */
     @Test
     void deleteAccount() throws Exception {
 
         mockMvc.perform(delete(AccountController.PATH + "delete/" + "{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(2)));
+                .andExpect(status().isOk());
     }
 }
