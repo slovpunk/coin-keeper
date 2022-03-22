@@ -1,23 +1,17 @@
 package ru.didyk.coinkeeper.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.didyk.coinkeeper.model.Account;
 
-import java.util.ArrayList;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,16 +28,16 @@ class AccountControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    public void contextLoads() throws Exception {
+    public void contextLoads() {
         assertThat(accountController).isNotNull();
     }
 
     @Test
     void getAccount() throws Exception {
-        this.mockMvc.perform(get("/api/coinkeeper/ + {id}", 1L))
+        mockMvc.perform(get("/api/coinkeeper/{id}", 1L))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))

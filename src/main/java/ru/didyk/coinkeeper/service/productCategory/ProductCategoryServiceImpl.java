@@ -2,6 +2,9 @@ package ru.didyk.coinkeeper.service.productCategory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.didyk.coinkeeper.exception.AccountIsNull;
+import ru.didyk.coinkeeper.exception.AccountNotFoundException;
+import ru.didyk.coinkeeper.exception.ProductCategoryIsNull;
 import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.model.ProductCategory;
 import ru.didyk.coinkeeper.repository.AccountRepository;
@@ -28,6 +31,12 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public void addProductCategory(ProductCategory productCategory, Long accountId) {
         Account account = accountRepository.findById(accountId).get();
+        if (account.getId() == null) {
+            throw new AccountNotFoundException("Account not found");
+        }
+        if (productCategory.getId() == null) {
+            throw new ProductCategoryIsNull("Product category is null");
+        }
         account.setBalance(account.getBalance() - productCategory.getSum());
         ProductCategory category = ProductCategory.builder()
                 .id(productCategory.getId())

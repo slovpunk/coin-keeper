@@ -2,6 +2,8 @@ package ru.didyk.coinkeeper.service.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.didyk.coinkeeper.exception.AccountIsNull;
+import ru.didyk.coinkeeper.exception.AccountNotFoundException;
 import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.repository.AccountRepository;
 
@@ -23,6 +25,9 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public Account saveAccount(Account account) {
+        if(account.getId() == null) {
+            throw new AccountIsNull("Account is null");
+        }
         return accountRepository.save(account);
     }
 
@@ -31,11 +36,15 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public Optional<Account> findAccountById(Long aLong) {
+        if(accountRepository.findById(aLong).isEmpty()) {
+            throw new AccountNotFoundException("Account not found");
+        }
         return accountRepository.findById(aLong);
     }
 
     /*
     При помощи этого метода пользователь может удалить счёт (Account)
+    TODO: создать исключение для этого метода
      */
     @Override
     public void deleteAccount(Long id) {
