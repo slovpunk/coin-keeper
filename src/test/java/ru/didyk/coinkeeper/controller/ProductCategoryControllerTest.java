@@ -28,6 +28,8 @@ class ProductCategoryControllerTest {
 
     /*
     TODO: java.lang.AssertionError: No value at JSON path "$.sum"
+    @TestContainers
+    поднять контейнер в докере
      */
     @Test
     void getCategoryById() throws Exception {

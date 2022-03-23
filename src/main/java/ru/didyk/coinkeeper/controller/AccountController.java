@@ -3,6 +3,7 @@ package ru.didyk.coinkeeper.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.didyk.coinkeeper.dto.AccountDTO;
 import ru.didyk.coinkeeper.model.Account;
 import ru.didyk.coinkeeper.service.account.AccountService;
 
@@ -25,12 +26,12 @@ public class AccountController {
     }
 
     @PostMapping("account")
-    public Account addAccount(@RequestBody Account account) {
+    public Account addAccount(@RequestBody AccountDTO account) {
         return accountService.saveAccount(account);
     }
 
     @PutMapping("account")
-    public Account updateAccount(@RequestBody Account account) {
+    public Account updateAccount(@RequestBody AccountDTO account) {
         return accountService.saveAccount(account);
     }
 
