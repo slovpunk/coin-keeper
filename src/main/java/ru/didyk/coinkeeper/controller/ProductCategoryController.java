@@ -3,6 +3,7 @@ package ru.didyk.coinkeeper.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.didyk.coinkeeper.dto.ProductCategoryDTO;
 import ru.didyk.coinkeeper.model.ProductCategory;
 import ru.didyk.coinkeeper.service.productCategory.ProductCategoryService;
 
@@ -26,13 +27,13 @@ public class ProductCategoryController {
     }
 
     @PostMapping("add-category/{account-id}")
-    public void addProductCategory(@RequestBody ProductCategory category,
+    public void addProductCategory(@RequestBody ProductCategoryDTO category,
                                    @PathVariable(name = "account-id") Long accountId) {
         productCategoryService.addProductCategory(category, accountId);
     }
 
     @PutMapping("update-category/{category-id}")
-    public void addPurchasesInCategory(@RequestBody ProductCategory category,
+    public void addPurchasesInCategory(@RequestBody ProductCategoryDTO category,
                                @PathVariable(name = "category-id") Long categoryId) {
         productCategoryService.addPurchasesInCategory(category, categoryId);
     }

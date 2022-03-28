@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.didyk.coinkeeper.model.Account;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;

@@ -29,9 +29,12 @@ public class Account {
     @JsonManagedReference
     private List<ProductCategory> productCategoryList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Currency> currencies;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<Currency> currencies;
 
 }

@@ -3,9 +3,8 @@ package ru.didyk.coinkeeper.dto;
 import lombok.Data;
 
 @Data
-public class ProductCategoryDTO {
+public class UserDTO {
 
     private Long id;
-    private String title;
-    private Integer sum;
+    private String name;
 }
