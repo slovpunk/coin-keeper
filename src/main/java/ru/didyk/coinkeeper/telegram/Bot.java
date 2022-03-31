@@ -6,6 +6,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -18,16 +19,6 @@ import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
 
-    @Override
-    public String getBotUsername() {
-        return "@BudKeepBot";
-    }
-
-    @Override
-    public String getBotToken() {
-        return "5171723480:AAFYKRQpKobxptC4e9pmPC6X9vjaQUo6t14";
-    }
-
     @SneakyThrows
     public static void main(String[] args) {
         Bot bot = new Bot();
@@ -36,11 +27,31 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     @Override
+    public String getBotUsername() {
+        return "@BudKeepBot";
+    }
+
+    @Override
+    public String getBotToken() {
+        return "";
+    }
+
+    @Override
     @SneakyThrows
     public void onUpdateReceived(Update update) {
+        if(update.hasCallbackQuery()) {
+            handleCallback(update.getCallbackQuery());
+        }
         if (update.hasMessage()) {
             handleMessage(update.getMessage());
         }
+    }
+
+    @SneakyThrows
+    private void handleCallback(CallbackQuery callbackQuery) {
+        Message message = callbackQuery.getMessage();
+        String data = callbackQuery.getData();
+        String[] param = callbackQuery.getData().split(":");
     }
 
     @SneakyThrows
