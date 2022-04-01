@@ -9,6 +9,7 @@ import ru.didyk.coinkeeper.model.ProductCategory;
 import ru.didyk.coinkeeper.repository.AccountRepository;
 import ru.didyk.coinkeeper.repository.ProductCategoryRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,7 +69,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     /*
     При помощи этого метода пользователь добавляет сумму совершенных покупок
-    в желаемую категорию. Баланс в Account и sum в ProductCategory обновляются.
+    в желаемую категорию. Баланс в Account и sum в ProductCategoryBot обновляются.
     В приложении будет выводиться сообщение со списком категорий пронумерованных, для добавления расходов
     надо будет выбрать цифру и сумму покупки.
      */
@@ -98,5 +99,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public Optional<ProductCategory> getCategoryById(Long id) {
         return productCategoryRepository.findById(id);
+    }
+
+    @Override
+    public List<ProductCategory> getAllProductCategories() {
+        return productCategoryRepository.findAll();
     }
 }

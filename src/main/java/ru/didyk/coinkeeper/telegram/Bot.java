@@ -1,8 +1,9 @@
 package ru.didyk.coinkeeper.telegram;
 
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import org.telegram.telegrambots.bots.DefaultAbsSender;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,11 +14,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.didyk.coinkeeper.telegram.entity.ProductCategory;
+import ru.didyk.coinkeeper.model.ProductCategory;
+import ru.didyk.coinkeeper.repository.ProductCategoryRepository;
+import ru.didyk.coinkeeper.service.productCategory.ProductCategoryService;
+import ru.didyk.coinkeeper.telegram.entity.ProductCategoryBot;
+import ru.didyk.coinkeeper.telegram.service.ProductCategoryServiceBot;
 
 import java.util.*;
 
+@Component
 public class Bot extends TelegramLongPollingBot {
+
+    private ProductCategoryServiceBot productCategoryServiceBot;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -39,7 +47,7 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     @SneakyThrows
     public void onUpdateReceived(Update update) {
-        if(update.hasCallbackQuery()) {
+        if (update.hasCallbackQuery()) {
             handleCallback(update.getCallbackQuery());
         }
         if (update.hasMessage()) {
@@ -50,10 +58,13 @@ public class Bot extends TelegramLongPollingBot {
     @SneakyThrows
     private void handleCallback(CallbackQuery callbackQuery) {
         Message message = callbackQuery.getMessage();
-        String data = callbackQuery.getData();
         String[] param = callbackQuery.getData().split(":");
+        String action = param[0];
+        ProductCategoryBot productCategory = ProductCategoryBot.valueOf(param[1]);
+        productCategoryServiceBot.setProductCategory(message.getChatId(), productCategory);
     }
 
+    // TODO: получать категории не из enum, а из таблицы product_category
     @SneakyThrows
     private void handleMessage(Message message) {
         if (message.hasText() && message.hasEntities()) {
@@ -65,7 +76,25 @@ public class Bot extends TelegramLongPollingBot {
                 switch (command) {
                     case "/set_product_category":
                         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-                        for (ProductCategory productCategory : ProductCategory.values()) {
+//                        List<ProductCategory> list = productCategoryRepository.findAll();
+//                        for (ProductCategory productCategory : list) {
+//                            System.out.println();
+//                            buttons.add(
+//                                    Arrays.asList(
+//                                            InlineKeyboardButton.builder()
+//                                                    .text(productCategory.getTitle())
+//                                                    .callbackData("Product category:" + productCategory)
+//                                                    .build()));
+//                        }
+//                        execute(
+//                                SendMessage.builder()
+//                                        .text("Please choose product category")
+//                                        .chatId(message.getChatId().toString())
+//                                        .replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
+//                                        .build());
+//                        return;
+                        for (ProductCategoryBot productCategory : ProductCategoryBot.values()) {
+                            System.out.println();
                             buttons.add(
                                     Arrays.asList(
                                             InlineKeyboardButton.builder()
@@ -80,8 +109,28 @@ public class Bot extends TelegramLongPollingBot {
                                         .replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
                                         .build());
                         return;
+                    case "/set_name_and_balance":
                 }
             }
+        }
+        if (message.hasText()) {
+            String messageText = message.getText();
+            Optional<Double> value = parseDouble(messageText);
+            if (value.isPresent()) {
+                execute(
+                        SendMessage.builder()
+                                .chatId(message.getChatId().toString())
+                                .text("Ok")
+                                .build());
+            }
+        }
+    }
+
+    private Optional<Double> parseDouble(String messageText) {
+        try {
+            return Optional.of(Double.parseDouble(messageText));
+        } catch (Exception e) {
+            return Optional.empty();
         }
     }
 }

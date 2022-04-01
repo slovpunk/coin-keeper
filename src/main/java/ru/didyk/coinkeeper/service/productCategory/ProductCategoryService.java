@@ -3,6 +3,7 @@ package ru.didyk.coinkeeper.service.productCategory;
 import ru.didyk.coinkeeper.dto.ProductCategoryDTO;
 import ru.didyk.coinkeeper.model.ProductCategory;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductCategoryService {
@@ -14,4 +15,6 @@ public interface ProductCategoryService {
     void deleteCategory(Long id);
 
     Optional<ProductCategory> getCategoryById(Long id);
+
+    List<ProductCategory> getAllProductCategories();
 }
