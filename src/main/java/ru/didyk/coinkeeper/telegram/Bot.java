@@ -126,7 +126,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (message.hasText()) {
             String messageText = message.getText();
-            Long id = message.getChatId();
+            Long id = message.getFrom().getId();
             Optional<Double> value = parseDouble(messageText);
             Optional<String> userName = parseString(messageText);
             Optional<String> userCategoryName = parseString(messageText);
@@ -153,7 +153,6 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             if (userCategoryName.isPresent()) {
-                System.out.println(userCategoryName.get().contains("!"));
                 createUserCategory(userCategoryName.get(), id);
                 execute(
                         SendMessage.builder()
