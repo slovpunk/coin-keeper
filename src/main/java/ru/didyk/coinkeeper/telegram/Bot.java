@@ -21,10 +21,7 @@ import ru.didyk.coinkeeper.service.productCategory.MoneyMovementService;
 import ru.didyk.coinkeeper.service.user.UserService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class Bot extends TelegramLongPollingBot {
@@ -186,12 +183,21 @@ public class Bot extends TelegramLongPollingBot {
 
     private void createUserCategory(String name, Long id) {
         name = name.replace("!", "");
-        UserCategory userCategory = UserCategory.builder()
-                .name(name)
-                .spending(true)
-                .user(userService.getUserById(id))
-                .build();
-        userCategoryService.addUserCategory(userCategory);
+        if (name.equalsIgnoreCase("balance")) {
+            UserCategory userCategory = UserCategory.builder()
+                    .name(name)
+                    .spending(false)
+                    .user(userService.getUserById(id))
+                    .build();
+            userCategoryService.addUserCategory(userCategory);
+        } else {
+            UserCategory userCategory = UserCategory.builder()
+                    .name(name)
+                    .spending(true)
+                    .user(userService.getUserById(id))
+                    .build();
+            userCategoryService.addUserCategory(userCategory);
+        }
     }
 
     private Optional<Double> parseDouble(String messageText) {
