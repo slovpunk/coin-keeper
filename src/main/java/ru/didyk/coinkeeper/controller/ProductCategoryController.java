@@ -4,8 +4,8 @@ package ru.didyk.coinkeeper.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.didyk.coinkeeper.dto.ProductCategoryDTO;
-import ru.didyk.coinkeeper.model.ProductCategory;
-import ru.didyk.coinkeeper.service.productCategory.ProductCategoryService;
+import ru.didyk.coinkeeper.model.MoneyMovement;
+import ru.didyk.coinkeeper.service.productCategory.MoneyMovementService;
 
 import java.util.Optional;
 
@@ -14,32 +14,37 @@ import java.util.Optional;
 @RequestMapping(AccountController.PATH)
 public class ProductCategoryController {
 
-    private ProductCategoryService productCategoryService;
+    private MoneyMovementService moneyMovementService;
 
     @Autowired
-    public ProductCategoryController(ProductCategoryService service) {
-        this.productCategoryService = service;
+    public ProductCategoryController(MoneyMovementService service) {
+        this.moneyMovementService = service;
     }
 
     @GetMapping("category/{category-id}")
-    public Optional<ProductCategory> getCategoryById(@PathVariable(name = "category-id") Long id) {
-        return productCategoryService.getCategoryById(id);
+    public Optional<MoneyMovement> getCategoryById(@PathVariable(name = "category-id") Long id) {
+        return moneyMovementService.getCategoryById(id);
     }
+
+//    @GetMapping("category")
+//    public List<MoneyMovement> getAllProductCategory() {
+//        return moneyMovementService.getAllProductCategories();
+//    }
 
     @PostMapping("add-category/{account-id}")
     public void addProductCategory(@RequestBody ProductCategoryDTO category,
                                    @PathVariable(name = "account-id") Long accountId) {
-        productCategoryService.addProductCategory(category, accountId);
+        moneyMovementService.addProductCategory(category, accountId);
     }
 
     @PutMapping("update-category/{category-id}")
     public void addPurchasesInCategory(@RequestBody ProductCategoryDTO category,
                                @PathVariable(name = "category-id") Long categoryId) {
-        productCategoryService.addPurchasesInCategory(category, categoryId);
+        moneyMovementService.addPurchasesInCategory(category, categoryId);
     }
 
     @DeleteMapping("delete-category/{category-id}")
     public void deleteProductCategory(@PathVariable(name = "category-id") Long categoryId) {
-        productCategoryService.deleteCategory(categoryId);
+        moneyMovementService.deleteCategory(categoryId);
     }
 }

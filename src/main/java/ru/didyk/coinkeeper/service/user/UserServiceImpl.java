@@ -3,7 +3,7 @@ package ru.didyk.coinkeeper.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.didyk.coinkeeper.dto.UserDTO;
-import ru.didyk.coinkeeper.model.Account;
+import ru.didyk.coinkeeper.model.UserCategory;
 import ru.didyk.coinkeeper.model.User;
 import ru.didyk.coinkeeper.repository.UserRepository;
 
@@ -21,8 +21,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void addUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
     public void addOrUpdateUser(UserDTO user) {
-        List<Account> accounts = new ArrayList<>();
+        List<UserCategory> userCategories = new ArrayList<>();
 
 
         User newUser = User.builder()

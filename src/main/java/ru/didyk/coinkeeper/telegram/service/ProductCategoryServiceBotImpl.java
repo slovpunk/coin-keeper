@@ -1,11 +1,13 @@
 package ru.didyk.coinkeeper.telegram.service;
 
+import org.springframework.stereotype.Component;
 import ru.didyk.coinkeeper.telegram.entity.ProductCategoryBot;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProductCategoryServiceImpl implements ProductCategoryServiceBot {
+@Component
+public class ProductCategoryServiceBotImpl implements ProductCategoryServiceBot {
 
     private final Map<Long, ProductCategoryBot> originalCurrency = new HashMap<>();
 

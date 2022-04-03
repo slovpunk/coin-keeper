@@ -14,26 +14,21 @@ import java.util.List;
 @Data
 @Builder
 @Entity
-@Table(name = "ACCOUNT")
-public class Account {
+@Table(name = "user_category")
+public class UserCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "balance")
-    private Long balance;
+    private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<ProductCategory> productCategoryList;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
     private User user;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+    private boolean spending = Boolean.TRUE;
+
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userCategory", cascade = CascadeType.ALL)
 //    @JsonManagedReference
 //    private List<Currency> currencies;
 

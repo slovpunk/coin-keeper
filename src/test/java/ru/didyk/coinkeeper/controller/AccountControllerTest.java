@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.didyk.coinkeeper.model.Account;
+import ru.didyk.coinkeeper.model.UserCategory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -46,11 +46,10 @@ class AccountControllerTest {
 
     @Test
     void addAccount() throws Exception {
-        Account account = new Account();
-        account.setId(1L);
-        account.setBalance(9999L);
+        UserCategory userCategory = new UserCategory();
+        userCategory.setId(1L);
 
-        String requestJson = mapper.writeValueAsString(account);
+        String requestJson = mapper.writeValueAsString(userCategory);
 
         mockMvc.perform(post(AccountController.PATH + "account")
                         .content(requestJson)
@@ -61,11 +60,10 @@ class AccountControllerTest {
 
     @Test
     void updateAccount() throws Exception {
-        Account account = new Account();
-        account.setId(1L);
-        account.setBalance(9999L);
+        UserCategory userCategory = new UserCategory();
+        userCategory.setId(1L);
 
-        String requestJson = mapper.writeValueAsString(account);
+        String requestJson = mapper.writeValueAsString(userCategory);
 
         mockMvc.perform(post(AccountController.PATH + "account")
                         .content(requestJson)

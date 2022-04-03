@@ -38,5 +38,5 @@ public class Currency {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     @JsonBackReference
-    private Account account;
+    private UserCategory userCategory;
 }
