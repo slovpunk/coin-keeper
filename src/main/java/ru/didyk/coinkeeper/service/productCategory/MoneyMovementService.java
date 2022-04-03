@@ -19,5 +19,5 @@ public interface MoneyMovementService {
 
     Optional<MoneyMovement> getCategoryById(Long id);
 
-    List<MoneyMovement> getAllProductCategories();
+    List<MoneyMovement> getAllMoneyMovement();
 }

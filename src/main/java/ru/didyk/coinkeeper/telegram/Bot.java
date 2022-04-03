@@ -112,7 +112,7 @@ public class Bot extends TelegramLongPollingBot {
                         );
                         System.out.println(message.getChatId().toString());
                         return;
-                    case "/set_user_category":
+                    case "/set_category":
                         execute(
                                 SendMessage.builder()
                                         .text("Please enter category name with \"!\". For ex: Food! ")
@@ -120,6 +120,26 @@ public class Bot extends TelegramLongPollingBot {
                                         .build()
                         );
                         System.out.println(message.getChatId().toString());
+                        return;
+                    case "/get_balance":
+                        List<UserCategory> userCategories = userCategoryService.getAll();
+                        List<MoneyMovement> moneyMovements = moneyMovementService.getAllMoneyMovement();
+                        StringBuilder builderForBalance = new StringBuilder();
+                        for (UserCategory userCategory : userCategories) {
+                            Double values = moneyMovements.stream()
+                                    .filter(m -> m.getCategory().getId().equals(userCategory.getId()))
+                                    .map(MoneyMovement::getValue)
+                                    .reduce((double) 0, Double::sum);
+                            builderForBalance.append(userCategory.getName())
+                                    .append(" : ")
+                                    .append(values + "\n");
+                        }
+                        execute(
+                                SendMessage.builder()
+                                        .text(String.valueOf(builderForBalance))
+                                        .chatId(message.getChatId().toString())
+                                        .build()
+                        );
                         return;
                 }
             }

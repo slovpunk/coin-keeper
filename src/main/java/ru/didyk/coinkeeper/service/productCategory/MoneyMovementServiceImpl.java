@@ -65,7 +65,7 @@ public class MoneyMovementServiceImpl implements MoneyMovementService {
     }
 
     @Override
-    public List<MoneyMovement> getAllProductCategories() {
+    public List<MoneyMovement> getAllMoneyMovement() {
         return moneyMovementRepository.findAll();
     }
 
