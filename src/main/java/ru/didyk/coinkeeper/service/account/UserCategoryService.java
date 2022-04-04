@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface UserCategoryService {
 
+    Optional<UserCategory> findByName(String name);
+
     void addUserCategory(UserCategory userCategory);
 
     UserCategory saveAccount(AccountDTO account);

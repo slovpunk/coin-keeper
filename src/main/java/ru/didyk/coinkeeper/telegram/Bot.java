@@ -30,7 +30,6 @@ public class Bot extends TelegramLongPollingBot {
     private final MoneyMovementService moneyMovementService;
     private final UserService userService;
     public UserCategory userCategory = new UserCategory();
-    private Long countForUser = 1L;
 
     @Autowired
     public Bot(TelegramBotsApi telegramBotsApi,
@@ -51,7 +50,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "";
+        return "5171723480:AAFYKRQpKobxptC4e9pmPC6X9vjaQUo6t14";
     }
 
     @Override
@@ -101,7 +100,6 @@ public class Bot extends TelegramLongPollingBot {
                                         .chatId(message.getChatId().toString())
                                         .replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
                                         .build());
-                        System.out.println(message.getChatId().toString());
                         return;
                     case "/set_user":
                         execute(
@@ -110,18 +108,17 @@ public class Bot extends TelegramLongPollingBot {
                                         .chatId(message.getChatId().toString())
                                         .build()
                         );
-                        System.out.println(message.getChatId().toString());
                         return;
                     case "/set_category":
                         execute(
                                 SendMessage.builder()
-                                        .text("Please enter category name with \"!\". For ex: Food! ")
+                                        .text("Please enter category name with \"+\". For ex: Food+ ")
                                         .chatId(message.getChatId().toString())
                                         .build()
                         );
-                        System.out.println(message.getChatId().toString());
                         return;
                     case "/get_balance":
+                        // TODO: добавить исключение на случай пустой таблицы
                         List<UserCategory> userCategories = userCategoryService.getAll();
                         List<MoneyMovement> moneyMovements = moneyMovementService.getAllMoneyMovement();
                         StringBuilder builderForBalance = new StringBuilder();
@@ -132,7 +129,8 @@ public class Bot extends TelegramLongPollingBot {
                                     .reduce((double) 0, Double::sum);
                             builderForBalance.append(userCategory.getName())
                                     .append(" : ")
-                                    .append(values + "\n");
+                                    .append(values)
+                                    .append("\n");
                         }
                         execute(
                                 SendMessage.builder()
@@ -160,10 +158,9 @@ public class Bot extends TelegramLongPollingBot {
                                 .build());
                 return;
             }
-
-            if (userName.isPresent() && countForUser != 0) {
+            //TODO: убрать необходимость вводить "+"
+            if (userName.isPresent() && !userCategoryName.get().contains("+")) {
                 createUser(userName.get(), id);
-                countForUser--;
                 execute(
                         SendMessage.builder()
                                 .chatId(message.getChatId().toString())
@@ -172,14 +169,13 @@ public class Bot extends TelegramLongPollingBot {
                 return;
             }
 
-            if (userCategoryName.isPresent()) {
-                createUserCategory(userCategoryName.get(), id);
+            if (userCategoryName.isPresent() && userCategoryName.get().contains("+")) {
+                createUserCategory(userCategoryName.get().replace("+", ""), id);
                 execute(
                         SendMessage.builder()
                                 .chatId(message.getChatId().toString())
                                 .text("UserCategory is added")
                                 .build());
-                return;
             }
         }
     }
@@ -191,7 +187,19 @@ public class Bot extends TelegramLongPollingBot {
                 .value(value)
                 .occurredAt(LocalDateTime.now())
                 .build();
-        moneyMovementService.addMoneyMovement(moneyMovement);
+        //TODO: вычитание из баланса суммы покупки
+        Optional<UserCategory> userCategoryOptional = userCategoryService.findByName(userCategory.getName());
+        if (userCategoryOptional.isPresent()
+                && !userCategoryOptional.get().getName().equalsIgnoreCase("balance")) {
+            Optional<UserCategory> userCategory = userCategoryService.findByName("balance");
+            MoneyMovement moneyMovement1 = MoneyMovement.builder()
+                    .category(userCategory.get())
+                    .value(0 - value)
+                    .occurredAt(LocalDateTime.now())
+                    .build();
+            moneyMovementService.addMoneyMovement(moneyMovement1);
+        }
+            moneyMovementService.addMoneyMovement(moneyMovement);
     }
 
     private void createUser(String name, Long id) {

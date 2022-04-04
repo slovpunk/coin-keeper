@@ -22,6 +22,11 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     }
 
     @Override
+    public Optional<UserCategory> findByName(String name) {
+        return userCategoryRepository.findByName(name);
+    }
+
+    @Override
     public void addUserCategory(UserCategory userCategory) {
         userCategoryRepository.save(userCategory);
     }
