@@ -122,6 +122,15 @@ public class Bot extends TelegramLongPollingBot {
                         List<UserCategory> userCategories = userCategoryService.getAll();
                         List<MoneyMovement> moneyMovements = moneyMovementService.getAllMoneyMovement();
                         StringBuilder builderForBalance = new StringBuilder();
+                        if (userCategories.isEmpty()) {
+                            execute(
+                                    SendMessage.builder()
+                                            .text("You have not categories")
+                                            .chatId(message.getChatId().toString())
+                                            .build()
+                            );
+                            return;
+                        }
                         for (UserCategory userCategory : userCategories) {
                             Double values = moneyMovements.stream()
                                     .filter(m -> m.getCategory().getId().equals(userCategory.getId()))
@@ -189,9 +198,10 @@ public class Bot extends TelegramLongPollingBot {
                 .build();
         //TODO: вычитание из баланса суммы покупки
         Optional<UserCategory> userCategoryOptional = userCategoryService.findByName(userCategory.getName());
-        if (userCategoryOptional.isPresent()
-                && !userCategoryOptional.get().getName().equalsIgnoreCase("balance")) {
-            Optional<UserCategory> userCategory = userCategoryService.findByName("balance");
+        List<UserCategory> categories = userCategoryService.getAll();
+        //TODO: проблема в регистре имени категории
+        if (categories.contains(userCategoryOptional.get()) && !userCategoryOptional.get().getName().equals("Balance")) {
+            Optional<UserCategory> userCategory = userCategoryService.findByName("Balance");
             MoneyMovement moneyMovement1 = MoneyMovement.builder()
                     .category(userCategory.get())
                     .value(0 - value)
@@ -199,7 +209,7 @@ public class Bot extends TelegramLongPollingBot {
                     .build();
             moneyMovementService.addMoneyMovement(moneyMovement1);
         }
-            moneyMovementService.addMoneyMovement(moneyMovement);
+        moneyMovementService.addMoneyMovement(moneyMovement);
     }
 
     private void createUser(String name, Long id) {
