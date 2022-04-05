@@ -73,6 +73,8 @@ public class Bot extends TelegramLongPollingBot {
         userCategorySelectedByButton = userCategoryService.findAccountById(Long.valueOf(param[1])).get();
     }
 
+    // метод, которые помогает понять существует ли юзер. Метод используется, чтобы заблокировать
+    // другие команды бота, если юзер не создан
     private boolean getUsers() {
         return userService.getAllUsers().isEmpty();
     }
@@ -85,9 +87,11 @@ public class Bot extends TelegramLongPollingBot {
             if (commandEntity.isPresent()) {
                 String command =
                         message.getText().substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
+
                 switch (command) {
-                    case "/set_money_movement":
-                        if(getUsers()) {
+                    // зафиксировать транзакцию по выбранной категории пользователя
+                    case "/set_money_movement" -> {
+                        if (getUsers()) {
                             execute(
                                     SendMessage.builder()
                                             .text("Please add new user by command /set_user")
@@ -112,7 +116,9 @@ public class Bot extends TelegramLongPollingBot {
                                         .replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
                                         .build());
                         return;
-                    case "/set_user":
+                    }
+                    // присвоить имя для пользователя
+                    case "/set_user" -> {
                         execute(
                                 SendMessage.builder()
                                         .text("Please enter your name")
@@ -120,8 +126,10 @@ public class Bot extends TelegramLongPollingBot {
                                         .build()
                         );
                         return;
-                    case "/set_category":
-                        if(getUsers()) {
+                    }
+                    // создать новую категорию
+                    case "/set_category" -> {
+                        if (getUsers()) {
                             execute(
                                     SendMessage.builder()
                                             .text("Please add new user by command /set_user")
@@ -136,8 +144,10 @@ public class Bot extends TelegramLongPollingBot {
                                         .build()
                         );
                         return;
-                    case "/get_balance":
-                        if(getUsers()) {
+                    }
+                    // получить баланс на основе всех сохраненных транзакций и вывести по категориям
+                    case "/get_balance" -> {
+                        if (getUsers()) {
                             execute(
                                     SendMessage.builder()
                                             .text("Please add new user by command /set_user")
@@ -174,16 +184,19 @@ public class Bot extends TelegramLongPollingBot {
                                         .build()
                         );
                         return;
+                    }
                 }
             }
         }
         if (message.hasText()) {
             String messageText = message.getText();
+            //получить id для пользователя из Телеграма
             Long id = message.getFrom().getId();
             Optional<Double> value = parseDouble(messageText);
             Optional<String> userName = parseString(messageText);
             Optional<String> userCategoryName = parseString(messageText);
 
+            // условие, которое обрабатывает ввод цифр
             if (value.isPresent()) {
                 buildMoneyMovement(value.get());
                 execute(
@@ -193,7 +206,7 @@ public class Bot extends TelegramLongPollingBot {
                                 .build());
                 return;
             }
-            //TODO: убрать необходимость вводить "+"
+            //условие, которое обрабатывает ввод имени пользователя
             if (userName.isPresent() && !userCategoryName.get().contains("+")) {
                 createUser(userName.get(), id);
                 execute(
@@ -203,7 +216,8 @@ public class Bot extends TelegramLongPollingBot {
                                 .build());
                 return;
             }
-
+            //TODO: убрать необходимость вводить "+"
+            //условие, которое обрабатывает ввод категории с "+"
             if (userCategoryName.isPresent() && userCategoryName.get().contains("+")) {
                 createUserCategory(userCategoryName.get().replace("+", ""), id);
                 execute(
@@ -236,6 +250,7 @@ public class Bot extends TelegramLongPollingBot {
         moneyMovementService.addMoneyMovement(newMoneyMovement);
     }
 
+    // создаёт нового пользователя с id пользователя из Телеграм
     private void createUser(String name, Long id) {
         User newUser = User.builder()
                 .id(id)
@@ -244,16 +259,20 @@ public class Bot extends TelegramLongPollingBot {
         userService.addUser(newUser);
     }
 
+    // создаёт новую категорию
     private void createUserCategory(String name, Long id) {
 
-        // условие, которое выполняется если категории Баланс не существует, а пользователь хочет добавить другую категорию
+        // условие, которое выполняется если категории Баланс не существует,
+        // а пользователь хочет добавить другую категорию
         if (userCategoryService.getAll().isEmpty()) {
+            //создаём новую категорию "Balance"
             UserCategory balanceCategory = UserCategory.builder()
                     .name("Balance")
                     .spending(false)
                     .user(userService.getUserById(id))
                     .build();
             userCategoryService.addUserCategory(balanceCategory);
+            //создаём первую запись, фиксирующую баланс на 0
             MoneyMovement firstTransactionForBalanceCategory = MoneyMovement.builder()
                     .category(balanceCategory) //проблема в том, что userCategory является глобальной переменной
                     .value(0.0)
@@ -261,7 +280,7 @@ public class Bot extends TelegramLongPollingBot {
                     .build();
             moneyMovementService.addMoneyMovement(firstTransactionForBalanceCategory);
         }
-
+        // создаётся категория
         UserCategory newUserCategory = UserCategory.builder()
                 .name(name)
                 .spending(true)
