@@ -22,6 +22,11 @@ public class UserCategoryServiceImpl implements UserCategoryService {
     }
 
     @Override
+    public Optional<UserCategory> getBySpendingFalse() {
+        return userCategoryRepository.findBySpendingFalse();
+    }
+
+    @Override
     public Optional<UserCategory> findByName(String name) {
         return userCategoryRepository.findByName(name);
     }

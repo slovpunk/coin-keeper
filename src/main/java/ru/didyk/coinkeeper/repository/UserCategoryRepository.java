@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface UserCategoryRepository extends JpaRepository<UserCategory, Long> {
     Optional<UserCategory> findByName(String name);
+    Optional<UserCategory> findBySpendingFalse();
 }

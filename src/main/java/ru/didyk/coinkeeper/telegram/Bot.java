@@ -29,7 +29,7 @@ public class Bot extends TelegramLongPollingBot {
     private final UserCategoryService userCategoryService;
     private final MoneyMovementService moneyMovementService;
     private final UserService userService;
-    public UserCategory userCategory = new UserCategory();
+    public UserCategory userCategorySelectedByButton = new UserCategory();
 
     @Autowired
     public Bot(TelegramBotsApi telegramBotsApi,
@@ -50,7 +50,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "5171723480:AAFYKRQpKobxptC4e9pmPC6X9vjaQUo6t14";
+        return "";
     }
 
     @Override
@@ -70,9 +70,12 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleCallback(CallbackQuery callbackQuery) {
         String[] param = callbackQuery.getData().split(":");
-        userCategory = userCategoryService.findAccountById(Long.valueOf(param[1])).get();
+        userCategorySelectedByButton = userCategoryService.findAccountById(Long.valueOf(param[1])).get();
     }
 
+    private boolean getUsers() {
+        return userService.getAllUsers().isEmpty();
+    }
 
     private void handleMessage(Message message) throws TelegramApiException {
         List<UserCategory> list;
@@ -84,6 +87,14 @@ public class Bot extends TelegramLongPollingBot {
                         message.getText().substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
                 switch (command) {
                     case "/set_money_movement":
+                        if(getUsers()) {
+                            execute(
+                                    SendMessage.builder()
+                                            .text("Please add new user by command /set_user")
+                                            .chatId(message.getChatId().toString())
+                                            .build());
+                            return;
+                        }
                         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
                         list = userCategoryService.getAll();
                         for (UserCategory userCategory : list) {
@@ -110,6 +121,14 @@ public class Bot extends TelegramLongPollingBot {
                         );
                         return;
                     case "/set_category":
+                        if(getUsers()) {
+                            execute(
+                                    SendMessage.builder()
+                                            .text("Please add new user by command /set_user")
+                                            .chatId(message.getChatId().toString())
+                                            .build());
+                            return;
+                        }
                         execute(
                                 SendMessage.builder()
                                         .text("Please enter category name with \"+\". For ex: Food+ ")
@@ -118,7 +137,14 @@ public class Bot extends TelegramLongPollingBot {
                         );
                         return;
                     case "/get_balance":
-                        // TODO: добавить исключение на случай пустой таблицы
+                        if(getUsers()) {
+                            execute(
+                                    SendMessage.builder()
+                                            .text("Please add new user by command /set_user")
+                                            .chatId(message.getChatId().toString())
+                                            .build());
+                            return;
+                        }
                         List<UserCategory> userCategories = userCategoryService.getAll();
                         List<MoneyMovement> moneyMovements = moneyMovementService.getAllMoneyMovement();
                         StringBuilder builderForBalance = new StringBuilder();
@@ -190,47 +216,58 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     //создаёт новую запись о движении денег
-    private void buildMoneyMovement(Double value) {
-        MoneyMovement moneyMovement = MoneyMovement.builder()
-                .category(userCategory) //проблема в том, что userCategory является глобальной переменной
-                .value(value)
+    private void buildMoneyMovement(Double enteredExpenseAmount) {
+        MoneyMovement newMoneyMovement = MoneyMovement.builder()
+                .category(userCategorySelectedByButton) //проблема в том, что userCategory является глобальной переменной
+                .value(enteredExpenseAmount)
                 .occurredAt(LocalDateTime.now())
                 .build();
-        //TODO: вычитание из баланса суммы покупки
-        Optional<UserCategory> userCategoryOptional = userCategoryService.findByName(userCategory.getName());
-        List<UserCategory> categories = userCategoryService.getAll();
-        //TODO: проблема в регистре имени категории
-        if (categories.contains(userCategoryOptional.get()) && !userCategoryOptional.get().getName().equals("Balance")) {
-            Optional<UserCategory> userCategory = userCategoryService.findByName("Balance");
-            MoneyMovement moneyMovement1 = MoneyMovement.builder()
-                    .category(userCategory.get())
-                    .value(0 - value)
+        //если это баланс, то мы не заходим в это условие. Сравнение идет по выбранной по кнопке категории
+        // и категории, имеющей false в spending
+        if (userCategoryService.getBySpendingFalse().isPresent() && !userCategorySelectedByButton.getName().equals(userCategoryService.getBySpendingFalse().get().getName())) {
+            UserCategory balanceCategory = userCategoryService.getBySpendingFalse().get();
+            MoneyMovement moneyMovementForBalanceCategory = MoneyMovement.builder()
+                    .category(balanceCategory)
+                    .value(0 - enteredExpenseAmount)
                     .occurredAt(LocalDateTime.now())
                     .build();
-            moneyMovementService.addMoneyMovement(moneyMovement1);
+            moneyMovementService.addMoneyMovement(moneyMovementForBalanceCategory);
         }
-        moneyMovementService.addMoneyMovement(moneyMovement);
+        moneyMovementService.addMoneyMovement(newMoneyMovement);
     }
 
     private void createUser(String name, Long id) {
-        User user = User.builder()
+        User newUser = User.builder()
                 .id(id)
                 .name(name)
                 .build();
-        userService.addUser(user);
+        userService.addUser(newUser);
     }
 
     private void createUserCategory(String name, Long id) {
 
-        UserCategory userCategory = UserCategory.builder()
+        // условие, которое выполняется если категории Баланс не существует, а пользователь хочет добавить другую категорию
+        if (userCategoryService.getAll().isEmpty()) {
+            UserCategory balanceCategory = UserCategory.builder()
+                    .name("Balance")
+                    .spending(false)
+                    .user(userService.getUserById(id))
+                    .build();
+            userCategoryService.addUserCategory(balanceCategory);
+            MoneyMovement firstTransactionForBalanceCategory = MoneyMovement.builder()
+                    .category(balanceCategory) //проблема в том, что userCategory является глобальной переменной
+                    .value(0.0)
+                    .occurredAt(LocalDateTime.now())
+                    .build();
+            moneyMovementService.addMoneyMovement(firstTransactionForBalanceCategory);
+        }
+
+        UserCategory newUserCategory = UserCategory.builder()
                 .name(name)
                 .spending(true)
                 .user(userService.getUserById(id))
                 .build();
-        if (name.equalsIgnoreCase("balance")) {
-            userCategory.setSpending(false);
-        }
-        userCategoryService.addUserCategory(userCategory);
+        userCategoryService.addUserCategory(newUserCategory);
     }
 
     private Optional<Double> parseDouble(String messageText) {
